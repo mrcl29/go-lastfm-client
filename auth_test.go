@@ -1,4 +1,4 @@
-package lastfm
+package golastfmclient_test
 
 import (
 	"context"
@@ -7,6 +7,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
+	golastfmclient "github.com/mrcl29/go-lastfm-client"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -15,7 +16,7 @@ func TestAuthService_GetToken(t *testing.T) {
 
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		is.Equal("auth.getToken", r.URL.Query().Get("method"))
-		
+
 		w.WriteHeader(http.StatusOK)
 		json.NewEncoder(w).Encode(map[string]string{
 			"token": "test_token",
@@ -23,7 +24,7 @@ func TestAuthService_GetToken(t *testing.T) {
 	}))
 	defer server.Close()
 
-	client := New("key", "secret", WithBaseURL(server.URL))
+	client := golastfmclient.New("key", "secret", golastfmclient.WithBaseURL(server.URL))
 	token, err := client.Auth.GetToken(context.Background())
 
 	is.NoError(err)
@@ -37,7 +38,7 @@ func TestAuthService_GetSession(t *testing.T) {
 		query := r.URL.Query()
 		is.Equal("auth.getSession", query.Get("method"))
 		is.Equal("token_val", query.Get("token"))
-		
+
 		w.WriteHeader(http.StatusOK)
 		json.NewEncoder(w).Encode(map[string]interface{}{
 			"session": map[string]string{
@@ -48,7 +49,7 @@ func TestAuthService_GetSession(t *testing.T) {
 	}))
 	defer server.Close()
 
-	client := New("key", "secret", WithBaseURL(server.URL))
+	client := golastfmclient.New("key", "secret", golastfmclient.WithBaseURL(server.URL))
 	session, err := client.Auth.GetSession(context.Background(), "token_val")
 
 	is.NoError(err)
@@ -61,10 +62,10 @@ func TestAuthService_GetMobileSession(t *testing.T) {
 
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		is.Equal(http.MethodPost, r.Method)
-		
+
 		err := r.ParseForm()
 		is.NoError(err)
-		
+
 		is.Equal("auth.getMobileSession", r.Form.Get("method"))
 		is.Equal("user", r.Form.Get("username"))
 		is.Equal("pass", r.Form.Get("password"))
@@ -79,7 +80,7 @@ func TestAuthService_GetMobileSession(t *testing.T) {
 	}))
 	defer server.Close()
 
-	client := New("key", "secret", WithBaseURL(server.URL))
+	client := golastfmclient.New("key", "secret", golastfmclient.WithBaseURL(server.URL))
 	session, err := client.Auth.GetMobileSession(context.Background(), "user", "pass")
 
 	is.NoError(err)
@@ -90,8 +91,8 @@ func TestAuthService_GetMobileSession(t *testing.T) {
 func TestAuthService_AuthURL(t *testing.T) {
 	is := assert.New(t)
 
-	client := New("test_key", "secret")
-	
+	client := golastfmclient.New("test_key", "secret")
+
 	is.Equal("http://www.last.fm/api/auth/?api_key=test_key", client.Auth.AuthURL(""))
 	is.Equal("http://www.last.fm/api/auth/?api_key=test_key&token=t1", client.Auth.AuthURL("t1"))
 }

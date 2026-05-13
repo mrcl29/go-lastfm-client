@@ -1,4 +1,4 @@
-package lastfm
+package golastfmclient
 
 import (
 	"net/http"
