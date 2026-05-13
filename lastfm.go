@@ -12,13 +12,14 @@ import (
 	"strings"
 	"time"
 
-	"github.com/mrcl29/go-lastfm-client/album"
-	"github.com/mrcl29/go-lastfm-client/artist"
-	"github.com/mrcl29/go-lastfm-client/chart"
-	"github.com/mrcl29/go-lastfm-client/geo"
-	"github.com/mrcl29/go-lastfm-client/tag"
-	"github.com/mrcl29/go-lastfm-client/track"
-	"github.com/mrcl29/go-lastfm-client/user"
+	"github.com/mrcl29/go-lastfm-client/service/album"
+	"github.com/mrcl29/go-lastfm-client/service/artist"
+	"github.com/mrcl29/go-lastfm-client/service/chart"
+	"github.com/mrcl29/go-lastfm-client/service/geo"
+	"github.com/mrcl29/go-lastfm-client/service/library"
+	"github.com/mrcl29/go-lastfm-client/service/tag"
+	"github.com/mrcl29/go-lastfm-client/service/track"
+	"github.com/mrcl29/go-lastfm-client/service/user"
 )
 
 const (
@@ -35,48 +36,15 @@ type Client struct {
 	userAgent  string
 	httpClient *http.Client
 
-	Auth   *AuthService
-	Track  *track.Service
-	Artist *artist.Service
-	Album  *album.Service
-	User   *user.Service
-	Chart  *chart.Service
-	Geo    *geo.Service
-	Tag    *tag.Service
-}
-
-// Option is a functional option for configuring the client.
-type Option func(*Client)
-
-// WithHTTPClient sets a custom HTTP client.
-func WithHTTPClient(httpClient *http.Client) Option {
-	return func(c *Client) {
-		c.httpClient = httpClient
-	}
-}
-
-// WithBaseURL sets a custom base URL.
-func WithBaseURL(baseURL string) Option {
-	return func(c *Client) {
-		if !strings.HasSuffix(baseURL, "/") {
-			baseURL += "/"
-		}
-		c.baseURL = baseURL
-	}
-}
-
-// WithUserAgent sets a custom User-Agent header.
-func WithUserAgent(userAgent string) Option {
-	return func(c *Client) {
-		c.userAgent = userAgent
-	}
-}
-
-// WithSessionKey sets the session key for authenticated requests.
-func WithSessionKey(sessionKey string) Option {
-	return func(c *Client) {
-		c.sessionKey = sessionKey
-	}
+	Auth    *AuthService
+	Track   *track.Service
+	Artist  *artist.Service
+	Album   *album.Service
+	User    *user.Service
+	Chart   *chart.Service
+	Geo     *geo.Service
+	Tag     *tag.Service
+	Library *library.Service
 }
 
 // New creates a new Last.fm API client.
@@ -103,18 +71,9 @@ func New(apiKey string, apiSecret string, opts ...Option) *Client {
 	c.Chart = chart.New(c)
 	c.Geo = geo.New(c)
 	c.Tag = tag.New(c)
+	c.Library = library.New(c)
 
 	return c
-}
-
-// APIError represents a Last.fm API error.
-type APIError struct {
-	Code    int    `json:"error"`
-	Message string `json:"message"`
-}
-
-func (e *APIError) Error() string {
-	return fmt.Sprintf("lastfm error %d: %s", e.Code, e.Message)
 }
 
 // get performs a GET request to the Last.fm API.
