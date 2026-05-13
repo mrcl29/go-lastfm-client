@@ -57,8 +57,8 @@ func (s *AuthService) GetMobileSession(ctx context.Context, username, password s
 		"username": {username},
 		"password": {password},
 	}
-	
-	// We need to ensure HTTPS for this call. 
+
+	// We need to ensure HTTPS for this call.
 	// If the client's baseURL is HTTP, we might need a temporary override or just assume HTTPS works.
 	// For now, we use the client's post method.
 	var resp authGetSessionResponse

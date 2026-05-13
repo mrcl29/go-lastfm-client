@@ -17,7 +17,7 @@ func TestUserService_GetInfo(t *testing.T) {
 			"playcount": "12345"
 		}
 	}`
-	
+
 	mock := &golastfmclient.MockClient{
 		T:          t,
 		HTTPMethod: "GET",

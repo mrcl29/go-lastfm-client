@@ -51,8 +51,8 @@ func (a *ArtistList) UnmarshalJSON(data []byte) error {
 // Album represents a Last.fm album.
 type Album struct {
 	Name        string      `json:"name,omitempty"`
-	Title       string      `json:"title,omitempty"` // Some endpoints use "title"
-	Text        string      `json:"#text,omitempty"` // Some endpoints use "#text" for name
+	Title       string      `json:"title,omitempty"`  // Some endpoints use "title"
+	Text        string      `json:"#text,omitempty"`  // Some endpoints use "#text" for name
 	Artist      interface{} `json:"artist,omitempty"` // Can be string or Artist struct
 	ID          string      `json:"id,omitempty"`
 	MBID        string      `json:"mbid,omitempty"`

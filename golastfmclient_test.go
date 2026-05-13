@@ -51,7 +51,7 @@ func TestClient_Post(t *testing.T) {
 
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		is.Equal(http.MethodPost, r.Method)
-		
+
 		err := r.ParseForm()
 		is.NoError(err)
 
@@ -112,7 +112,7 @@ func TestClient_Sign(t *testing.T) {
 	}
 
 	sig := client.sign(params)
-	
+
 	// Alphabetical order of keys (excluding format): api_key, method, token
 	// Concatenation: api_key + value + method + value + token + value + secret
 	expectedInput := "api_keytest_api_keymethodauth.getSessiontokentest_tokentest_api_secret"

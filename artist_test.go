@@ -20,7 +20,7 @@ func TestArtistService_GetInfo(t *testing.T) {
 			}
 		}
 	}`
-	
+
 	mock := &golastfmclient.MockClient{
 		T:          t,
 		HTTPMethod: "GET",

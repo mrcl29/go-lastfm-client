@@ -17,7 +17,7 @@ func TestTagService_GetInfo(t *testing.T) {
 			"reach": "12345"
 		}
 	}`
-	
+
 	mock := &golastfmclient.MockClient{
 		T:          t,
 		HTTPMethod: "GET",

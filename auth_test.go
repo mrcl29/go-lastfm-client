@@ -18,7 +18,7 @@ func TestAuthService_GetToken(t *testing.T) {
 		is.Equal("auth.getToken", r.URL.Query().Get("method"))
 
 		w.WriteHeader(http.StatusOK)
-		json.NewEncoder(w).Encode(map[string]string{
+		_ = json.NewEncoder(w).Encode(map[string]string{
 			"token": "test_token",
 		})
 	}))
@@ -40,7 +40,7 @@ func TestAuthService_GetSession(t *testing.T) {
 		is.Equal("token_val", query.Get("token"))
 
 		w.WriteHeader(http.StatusOK)
-		json.NewEncoder(w).Encode(map[string]interface{}{
+		_ = json.NewEncoder(w).Encode(map[string]interface{}{
 			"session": map[string]string{
 				"name": "user",
 				"key":  "session_key",
@@ -71,7 +71,7 @@ func TestAuthService_GetMobileSession(t *testing.T) {
 		is.Equal("pass", r.Form.Get("password"))
 
 		w.WriteHeader(http.StatusOK)
-		json.NewEncoder(w).Encode(map[string]interface{}{
+		_ = json.NewEncoder(w).Encode(map[string]interface{}{
 			"session": map[string]string{
 				"name": "user",
 				"key":  "mobile_session_key",
