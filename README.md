@@ -18,7 +18,7 @@ Built with scalability and resilience in mind, this library handles the complexi
 - **Authentication**: Easy-to-use support for both Desktop (Token-based) and Mobile (Credentials-based) authentication flows.
 - **Functional Options**: Clean client initialization using the functional options pattern.
 - **Request Signing**: Automatic generation of `api_sig` for all authenticated methods.
-- **Modern Go**: Leverages Go 1.26 features and follows standard project layout conventions.
+- **Modern Go**: Leverages Go 1.26.3 features and follows standard project layout conventions.
 
 ## 🚀 Installation
 
