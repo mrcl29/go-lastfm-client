@@ -5,6 +5,7 @@ The Last.fm API allows anyone to build their own programs using Last.fm data. Fi
 ## Table of Contents
 
 - [Last.fm Music Discovery API](#lastfm-music-discovery-api)
+  - [Table of Contents](#table-of-contents)
   - [Getting Started](#getting-started)
   - [API Guides](#api-guides)
     - [Introduction](#introduction)
@@ -23,43 +24,43 @@ The Last.fm API allows anyone to build their own programs using Last.fm data. Fi
       - [Authentication: Web Application How-To](#authentication-web-application-how-to)
         - [1. Get an API Key](#1-get-an-api-key)
         - [2. Request authorization from the user](#2-request-authorization-from-the-user)
-        - [2.1 Custom callback url](#21-custom-callback-url)
+          - [2.1 Custom callback url](#21-custom-callback-url)
         - [3. Create an authentication handler](#3-create-an-authentication-handler)
-        - [3.1 Authentication Tokens](#31-authentication-tokens)
+          - [3.1 Authentication Tokens](#31-authentication-tokens)
         - [4. Fetch a Web Service Session](#4-fetch-a-web-service-session)
-        - [4.1 Session Lifetime](#41-session-lifetime)
+          - [4.1 Session Lifetime](#41-session-lifetime)
         - [5. Make authenticated web service calls](#5-make-authenticated-web-service-calls)
         - [6. Sign your calls](#6-sign-your-calls)
       - [Authentication: Mobile Application How-To](#authentication-mobile-application-how-to)
         - [1. Get an API Key](#1-get-an-api-key-1)
         - [2. Request authorization from the user](#2-request-authorization-from-the-user-1)
-        - [2.1 Session Lifetime](#21-session-lifetime)
+          - [2.1 Session Lifetime](#21-session-lifetime)
         - [3. Make authenticated web service calls](#3-make-authenticated-web-service-calls)
         - [4. Sign your calls](#4-sign-your-calls)
       - [Authentication: Desktop Application How-To](#authentication-desktop-application-how-to)
         - [1. Get an API Key](#1-get-an-api-key-2)
         - [2. Fetch a request token](#2-fetch-a-request-token)
         - [3. Request authorization from the user](#3-request-authorization-from-the-user)
-        - [4. Fetch A Web Service Session](#4-fetch-a-web-service-session)
-        - [4.1 Session Lifetime](#41-session-lifetime-1)
+        - [4. Fetch A Web Service Session](#4-fetch-a-web-service-session-1)
+          - [4.1 Session Lifetime](#41-session-lifetime-1)
         - [5. Make authenticated web service calls](#5-make-authenticated-web-service-calls-1)
         - [6. Sign your calls](#6-sign-your-calls-1)
       - [Authentication API](#authentication-api)
         - [1. Authors](#1-authors)
         - [2. Requirements](#2-requirements)
-        - [2.1 Web-based Authentication](#21-web-based-authentication)
+          - [2.1 Web-based Authentication](#21-web-based-authentication)
         - [3. Authentication For Web Applications](#3-authentication-for-web-applications)
-        - [3.1 Request authorization from the user](#31-request-authorization-from-the-user)
-        - [3.2 Create an authentication handler](#32-create-an-authentication-handler)
-        - [3.3 Create a Web Service Session](#33-create-a-web-service-session)
+          - [3.1 Request authorization from the user](#31-request-authorization-from-the-user)
+          - [3.2 Create an authentication handler](#32-create-an-authentication-handler)
+          - [3.3 Create a Web Service Session](#33-create-a-web-service-session)
         - [4. Authentication For Desktop Applications](#4-authentication-for-desktop-applications)
-        - [4.1 Fetch a request token](#41-fetch-a-request-token)
-        - [4.2 Request authorization from the user](#42-request-authorization-from-the-user)
-        - [4.3 Create a Web Service Session](#43-create-a-web-service-session)
+          - [4.1 Fetch a request token](#41-fetch-a-request-token)
+          - [4.2 Request authorization from the user](#42-request-authorization-from-the-user)
+          - [4.3 Create a Web Service Session](#43-create-a-web-service-session)
         - [5. Authentication For Mobile Applications](#5-authentication-for-mobile-applications)
-        - [6. Tokens & Sessions](#6-tokens-sessions)
-        - [6.1 Authentication Tokens](#61-authentication-tokens)
-        - [6.2 Session Lifetime](#62-session-lifetime)
+        - [6. Tokens \& Sessions](#6-tokens--sessions)
+          - [6.1 Authentication Tokens](#61-authentication-tokens)
+          - [6.2 Session Lifetime](#62-session-lifetime)
         - [7. Making authenticated calls](#7-making-authenticated-calls)
         - [8. Signing Calls](#8-signing-calls)
     - [Scrobbling 2.0 Documentation](#scrobbling-20-documentation)
@@ -103,7 +104,7 @@ The Last.fm API allows anyone to build their own programs using Last.fm data. Fi
       - [REST Responses](#rest-responses)
       - [REST Errors](#rest-errors)
       - [JSON Responses](#json-responses)
-      - [Note:](#note)
+      - [Note](#note)
       - [JSON Errors](#json-errors)
       - [Example failure response:](#example-failure-response)
     - [XML-RPC](#xml-rpc)
@@ -170,6 +171,7 @@ The Last.fm API allows anyone to build their own programs using Last.fm data. Fi
         - [Params](#params-9)
         - [Auth](#auth-9)
         - [Sample Response](#sample-response-9)
+        - [Attributes](#attributes-2)
         - [Errors](#errors-9)
       - [artist.getTags](#artistgettags)
         - [Example URLs](#example-urls-7)
@@ -206,242 +208,246 @@ The Last.fm API allows anyone to build their own programs using Last.fm data. Fi
         - [Auth](#auth-15)
         - [Sample Response](#sample-response-15)
         - [Errors](#errors-15)
-    - [auth](#auth)
+    - [auth](#auth-16)
       - [auth.getMobileSession](#authgetmobilesession)
         - [Params](#params-16)
-        - [Auth](#auth-16)
+        - [Auth](#auth-17)
         - [Sample Response](#sample-response-16)
       - [auth.getSession](#authgetsession)
         - [Params](#params-17)
-        - [Auth](#auth-17)
+        - [Auth](#auth-18)
         - [Sample Response](#sample-response-17)
       - [auth.getToken](#authgettoken)
         - [Example URLs](#example-urls-12)
         - [Params](#params-18)
-        - [Auth](#auth-18)
+        - [Auth](#auth-19)
         - [Sample Response](#sample-response-18)
     - [chart](#chart)
       - [chart.getTopArtists](#chartgettopartists)
         - [Example URLs](#example-urls-13)
         - [Params](#params-19)
-        - [Auth](#auth-19)
+        - [Auth](#auth-20)
         - [Sample Response](#sample-response-19)
         - [Errors](#errors-16)
       - [chart.getTopTags](#chartgettoptags)
         - [Example URLs](#example-urls-14)
         - [Params](#params-20)
-        - [Auth](#auth-20)
+        - [Auth](#auth-21)
         - [Sample Response](#sample-response-20)
         - [Errors](#errors-17)
       - [chart.getTopTracks](#chartgettoptracks)
         - [Example URLs](#example-urls-15)
         - [Params](#params-21)
-        - [Auth](#auth-21)
+        - [Auth](#auth-22)
         - [Sample Response](#sample-response-21)
         - [Errors](#errors-18)
     - [geo](#geo)
       - [geo.getTopArtists](#geogettopartists)
         - [Example URLs](#example-urls-16)
         - [Params](#params-22)
-        - [Auth](#auth-22)
+        - [Auth](#auth-23)
         - [Sample Response](#sample-response-22)
         - [Errors](#errors-19)
       - [geo.getTopTracks](#geogettoptracks)
         - [Example URLs](#example-urls-17)
         - [Params](#params-23)
-        - [Auth](#auth-23)
+        - [Auth](#auth-24)
         - [Sample Response](#sample-response-23)
         - [Errors](#errors-20)
     - [library](#library)
       - [library.getArtists](#librarygetartists)
         - [Example URLs](#example-urls-18)
         - [Params](#params-24)
-        - [Auth](#auth-24)
+        - [Auth](#auth-25)
         - [Sample Response](#sample-response-24)
         - [Errors](#errors-21)
     - [tag](#tag)
       - [tag.getInfo](#taggetinfo)
         - [Example URLs](#example-urls-19)
         - [Params](#params-25)
-        - [Auth](#auth-25)
+        - [Auth](#auth-26)
         - [Sample Response](#sample-response-25)
+        - [Attributes](#attributes-3)
         - [Errors](#errors-22)
       - [tag.getSimilar](#taggetsimilar)
         - [Example URLs](#example-urls-20)
         - [Params](#params-26)
-        - [Auth](#auth-26)
+        - [Auth](#auth-27)
         - [Sample Response](#sample-response-26)
         - [Errors](#errors-23)
       - [tag.getTopAlbums](#taggettopalbums)
         - [Example URLs](#example-urls-21)
         - [Params](#params-27)
-        - [Auth](#auth-27)
+        - [Auth](#auth-28)
         - [Sample Response](#sample-response-27)
         - [Errors](#errors-24)
       - [tag.getTopArtists](#taggettopartists)
         - [Example URLs](#example-urls-22)
         - [Params](#params-28)
-        - [Auth](#auth-28)
+        - [Auth](#auth-29)
         - [Sample Response](#sample-response-28)
         - [Errors](#errors-25)
       - [tag.getTopTags](#taggettoptags)
         - [Example URLs](#example-urls-23)
         - [Params](#params-29)
-        - [Auth](#auth-29)
+        - [Auth](#auth-30)
         - [Sample Response](#sample-response-29)
         - [Errors](#errors-26)
       - [tag.getTopTracks](#taggettoptracks)
         - [Example URLs](#example-urls-24)
         - [Params](#params-30)
-        - [Auth](#auth-30)
+        - [Auth](#auth-31)
         - [Sample Response](#sample-response-30)
         - [Errors](#errors-27)
       - [tag.getWeeklyChartList](#taggetweeklychartlist)
         - [Example URLs](#example-urls-25)
         - [Params](#params-31)
-        - [Auth](#auth-31)
+        - [Auth](#auth-32)
         - [Sample Response](#sample-response-31)
         - [Errors](#errors-28)
     - [track](#track)
       - [track.addTags](#trackaddtags)
         - [Params](#params-32)
-        - [Auth](#auth-32)
+        - [Auth](#auth-33)
         - [Sample Response](#sample-response-32)
         - [Errors](#errors-29)
       - [track.getCorrection](#trackgetcorrection)
         - [Example URLs](#example-urls-26)
         - [Params](#params-33)
-        - [Auth](#auth-33)
+        - [Auth](#auth-34)
         - [Sample Response](#sample-response-33)
         - [Errors](#errors-30)
       - [track.getInfo](#trackgetinfo)
         - [Example URLs](#example-urls-27)
         - [Params](#params-34)
-        - [Auth](#auth-34)
+        - [Auth](#auth-35)
         - [Sample Response](#sample-response-34)
+        - [Attributes](#attributes-4)
         - [Errors](#errors-31)
       - [track.getSimilar](#trackgetsimilar)
         - [Example URLs](#example-urls-28)
         - [Params](#params-35)
-        - [Auth](#auth-35)
+        - [Auth](#auth-36)
         - [Sample Response](#sample-response-35)
         - [Errors](#errors-32)
       - [track.getTags](#trackgettags)
         - [Example URLs](#example-urls-29)
         - [Params](#params-36)
-        - [Auth](#auth-36)
+        - [Auth](#auth-37)
         - [Sample Response](#sample-response-36)
         - [Errors](#errors-33)
       - [track.getTopTags](#trackgettoptags)
         - [Example URLs](#example-urls-30)
         - [Params](#params-37)
-        - [Auth](#auth-37)
+        - [Auth](#auth-38)
         - [Sample Response](#sample-response-37)
         - [Errors](#errors-34)
       - [track.love](#tracklove)
         - [Params](#params-38)
-        - [Auth](#auth-38)
+        - [Auth](#auth-39)
         - [Sample Response](#sample-response-38)
       - [track.removeTag](#trackremovetag)
         - [Params](#params-39)
-        - [Auth](#auth-39)
+        - [Auth](#auth-40)
         - [Sample Response](#sample-response-39)
         - [Errors](#errors-35)
       - [track.scrobble](#trackscrobble)
         - [Params](#params-40)
-        - [Auth](#auth-40)
+        - [Auth](#auth-41)
         - [Sample Response](#sample-response-40)
+        - [Attributes](#attributes-5)
       - [track.search](#tracksearch)
         - [Example URLs](#example-urls-31)
         - [Params](#params-41)
-        - [Auth](#auth-41)
+        - [Auth](#auth-42)
         - [Sample Response](#sample-response-41)
         - [Errors](#errors-36)
       - [track.unlove](#trackunlove)
         - [Params](#params-42)
-        - [Auth](#auth-42)
+        - [Auth](#auth-43)
         - [Sample Response](#sample-response-42)
       - [track.updateNowPlaying](#trackupdatenowplaying)
         - [Params](#params-43)
-        - [Auth](#auth-43)
+        - [Auth](#auth-44)
         - [Sample Response](#sample-response-43)
+        - [Attributes](#attributes-6)
     - [user](#user)
       - [user.getFriends](#usergetfriends)
         - [Example URLs](#example-urls-32)
         - [Params](#params-44)
-        - [Auth](#auth-44)
+        - [Auth](#auth-45)
         - [Sample Response](#sample-response-44)
         - [Errors](#errors-37)
       - [user.getInfo](#usergetinfo)
         - [Example URLs](#example-urls-33)
         - [Params](#params-45)
-        - [Auth](#auth-45)
+        - [Auth](#auth-46)
         - [Sample Response](#sample-response-45)
         - [Errors](#errors-38)
       - [user.getLovedTracks](#usergetlovedtracks)
         - [Example URLs](#example-urls-34)
         - [Params](#params-46)
-        - [Auth](#auth-46)
+        - [Auth](#auth-47)
         - [Sample Response](#sample-response-46)
         - [Errors](#errors-39)
       - [user.getPersonalTags](#usergetpersonaltags)
         - [Example URLs](#example-urls-35)
         - [Params](#params-47)
-        - [Auth](#auth-47)
+        - [Auth](#auth-48)
         - [Sample Response](#sample-response-47)
         - [Errors](#errors-40)
       - [user.getRecentTracks](#usergetrecenttracks)
         - [Example URLs](#example-urls-36)
         - [Params](#params-48)
-        - [Auth](#auth-48)
+        - [Auth](#auth-49)
         - [Sample Response](#sample-response-48)
         - [Errors](#errors-41)
       - [user.getTopAlbums](#usergettopalbums)
         - [Example URLs](#example-urls-37)
         - [Params](#params-49)
-        - [Auth](#auth-49)
+        - [Auth](#auth-50)
         - [Sample Response](#sample-response-49)
         - [Errors](#errors-42)
       - [user.getTopArtists](#usergettopartists)
         - [Example URLs](#example-urls-38)
         - [Params](#params-50)
-        - [Auth](#auth-50)
+        - [Auth](#auth-51)
         - [Sample Response](#sample-response-50)
         - [Errors](#errors-43)
       - [user.getTopTags](#usergettoptags)
         - [Example URLs](#example-urls-39)
         - [Params](#params-51)
-        - [Auth](#auth-51)
+        - [Auth](#auth-52)
         - [Sample Response](#sample-response-51)
         - [Errors](#errors-44)
       - [user.getTopTracks](#usergettoptracks)
         - [Example URLs](#example-urls-40)
         - [Params](#params-52)
-        - [Auth](#auth-52)
+        - [Auth](#auth-53)
         - [Sample Response](#sample-response-52)
         - [Errors](#errors-45)
       - [user.getWeeklyAlbumChart](#usergetweeklyalbumchart)
         - [Example URLs](#example-urls-41)
         - [Params](#params-53)
-        - [Auth](#auth-53)
+        - [Auth](#auth-54)
         - [Sample Response](#sample-response-53)
         - [Errors](#errors-46)
       - [user.getWeeklyArtistChart](#usergetweeklyartistchart)
         - [Example URLs](#example-urls-42)
         - [Params](#params-54)
-        - [Auth](#auth-54)
+        - [Auth](#auth-55)
         - [Sample Response](#sample-response-54)
         - [Errors](#errors-47)
       - [user.getWeeklyChartList](#usergetweeklychartlist)
         - [Example URLs](#example-urls-43)
         - [Params](#params-55)
-        - [Auth](#auth-55)
+        - [Auth](#auth-56)
         - [Sample Response](#sample-response-55)
         - [Errors](#errors-48)
       - [user.getWeeklyTrackChart](#usergetweeklytrackchart)
         - [Example URLs](#example-urls-44)
         - [Params](#params-56)
-        - [Auth](#auth-56)
+        - [Auth](#auth-57)
         - [Sample Response](#sample-response-56)
         - [Errors](#errors-49)
 
@@ -1261,7 +1267,6 @@ See the individual method call pages for service specific error codes. Errors wi
 </lfm>
 ```
 
-
 #### JSON Responses
 
 You can request API responses in JSON format with the following parameters:
@@ -1269,7 +1274,7 @@ You can request API responses in JSON format with the following parameters:
 format=json : A Last.fm API Key.
 callback (Optional) : A callback function name which will wrap the JSON response.
 
-#### Note:
+#### Note
 
 If you don't specify a callback, there's no default, and the response will be pure JSON content with a application/json MIME type. With a callback, the MIME type is text/javascript
 
@@ -2315,9 +2320,9 @@ This service does not require authentication.
 
 Errors
 
-    4 : Invalid authentication token supplied
-    14 : This token has not been authorized
-    15 : This token has expired
+- 4 : Invalid authentication token supplied
+- 14 : This token has not been authorized
+- 15 : This token has expired
 - 2 : Invalid service - This service does not exist
 - 3 : Invalid Method - No method with that name in this package
 - 4 : Authentication Failed - You do not have permissions to access the service
@@ -2357,7 +2362,7 @@ This service does not require authentication.
 
 Errors
 
-    8 : There was an error granting the request token. Please try again later
+- 8 : There was an error granting the request token. Please try again later
 - 2 : Invalid service - This service does not exist
 - 3 : Invalid Method - No method with that name in this package
 - 4 : Authentication Failed - You do not have permissions to access the service
@@ -3886,10 +3891,12 @@ This service does not require authentication.
 #### user.getPersonalTags
 
 Get the user's personal tags
+
 ##### Example URLs
 
 JSON: /2.0/?method=user.getpersonaltags&user=rj&tag=rock&taggingtype=artist&api_key=YOUR... (opens new window)
 XML: /2.0/?method=user.getpersonaltags&user=rj&tag=rock&taggingtype=artist&api_key=YOUR... (opens new window)
+
 ##### Params
 
 user (Required) : The user who performed the taggings.
@@ -3898,9 +3905,11 @@ taggingtype[artist|album|track] (Required) : The type of items which have been t
 limit (Optional) : The number of results to fetch per page. Defaults to 50.
 page (Optional) : The page number to fetch. Defaults to first page.
 api_key (Required) : A Last.fm API key.
+
 ##### Auth
 
 This service does not require authentication.
+
 ##### Sample Response
 
 ```
@@ -3941,10 +3950,12 @@ This service does not require authentication.
 #### user.getRecentTracks
 
 Get a list of the recent tracks listened to by this user. Also includes the currently playing track with the nowplaying="true" attribute if the user is currently listening.
+
 ##### Example URLs
 
 JSON: /2.0/?method=user.getrecenttracks&user=rj&api_key=YOUR_API_KEY&format=json (opens new window)
 XML: /2.0/?method=user.getrecenttracks&user=rj&api_key=YOUR_API_KEY (opens new window)
+
 ##### Params
 
 limit (Optional) : The number of results to fetch per page. Defaults to 50. Maximum is 200.
@@ -3954,9 +3965,11 @@ from (Optional) : Beginning timestamp of a range - only display scrobbles after 
 extended (0|1) (Optional) : Includes extended data in each artist, and whether or not the user has loved each track
 to (Optional) : End timestamp of a range - only display scrobbles before this time, in UNIX timestamp format (integer number of seconds since 00:00:00, January 1st 1970 UTC). This must be in the UTC time zone.
 api_key (Required) : A Last.fm API key.
+
 ##### Auth
 
 This service does not require authentication.
+
 ##### Sample Response
 
 ```
@@ -3994,10 +4007,12 @@ This service does not require authentication.
 #### user.getTopAlbums
 
 Get the top albums listened to by a user. You can stipulate a time period. Sends the overall chart by default.
+
 ##### Example URLs
 
 JSON: /2.0/?method=user.gettopalbums&user=rj&api_key=YOUR_API_KEY&format=json (opens new window)
 XML: /2.0/?method=user.gettopalbums&user=rj&api_key=YOUR_API_KEY (opens new window)
+
 ##### Params
 
 user (Required) : The user name to fetch top albums for.
