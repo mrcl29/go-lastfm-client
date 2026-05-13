@@ -27,7 +27,7 @@ func TestClient_Get(t *testing.T) {
 		is.Equal("Cher", query.Get("artist"))
 
 		w.WriteHeader(http.StatusOK)
-		json.NewEncoder(w).Encode(map[string]interface{}{
+		_ = json.NewEncoder(w).Encode(map[string]interface{}{
 			"artist": map[string]string{
 				"name": "Cher",
 			},
@@ -62,7 +62,7 @@ func TestClient_Post(t *testing.T) {
 		is.NotEmpty(form.Get("api_sig"))
 
 		w.WriteHeader(http.StatusOK)
-		json.NewEncoder(w).Encode(map[string]interface{}{
+		_ = json.NewEncoder(w).Encode(map[string]interface{}{
 			"status": "ok",
 		})
 	}))
@@ -82,7 +82,7 @@ func TestClient_Error(t *testing.T) {
 
 	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
-		json.NewEncoder(w).Encode(map[string]interface{}{
+		_ = json.NewEncoder(w).Encode(map[string]interface{}{
 			"error":   10,
 			"message": "Invalid API Key",
 		})

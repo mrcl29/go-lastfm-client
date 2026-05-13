@@ -168,6 +168,6 @@ func (c *Client) sign(params url.Values) string {
 	sb.WriteString(c.apiSecret)
 
 	h := md5.New()
-	io.WriteString(h, sb.String())
+	_, _ = io.WriteString(h, sb.String())
 	return fmt.Sprintf("%x", h.Sum(nil))
 }
