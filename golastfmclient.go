@@ -15,8 +15,10 @@ import (
 )
 
 const (
-	defaultBaseURL   = "https://ws.audioscrobbler.com/2.0/"
-	defaultUserAgent = "go-lastfm-client/0.1.0 (github.com/mrcl29/go-lastfm-client)"
+	// DefaultBaseURL is the default Last.fm API base URL.
+	DefaultBaseURL = "https://ws.audioscrobbler.com/2.0/"
+	// DefaultUserAgent is the default User-Agent header used by the client.
+	DefaultUserAgent = "go-lastfm-client/0.1.0 (github.com/mrcl29/go-lastfm-client)"
 )
 
 // APIClient defines the interface required by the services.
@@ -49,8 +51,8 @@ func New(apiKey string, apiSecret string, opts ...Option) *Client {
 	c := &Client{
 		apiKey:    apiKey,
 		apiSecret: apiSecret,
-		baseURL:   defaultBaseURL,
-		userAgent: defaultUserAgent,
+		baseURL:   DefaultBaseURL,
+		userAgent: DefaultUserAgent,
 		httpClient: &http.Client{
 			Timeout: 30 * time.Second,
 		},
