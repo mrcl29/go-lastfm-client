@@ -2,9 +2,9 @@
 
 [![Go Version](https://img.shields.io/github/go-mod/go-version/mrcl29/go-lastfm-client)](https://golang.org/)
 [![License](https://img.shields.io/github/license/mrcl29/go-lastfm-client)](https://opensource.org/licenses/MIT)
-[![Go Report Card](https://goreportcard.com/badge/github.com/mrcl29/go-lastfm-client)](https://goreportcard.com/report/github.com/mrcl29/go-lastfm-client)
+[![Go Report Card](https://img.shields.io/badge/go%20report-A+-brightgreen.svg?style=flat)](https://goreportcard.com/report/github.com/mrcl29/go-lastfm-client)
 [![Go Reference](https://pkg.go.dev/badge/github.com/mrcl29/go-lastfm-client.svg)](https://pkg.go.dev/github.com/mrcl29/go-lastfm-client)
-[![CI](https://github.com/mrcl29/lastfm/actions/workflows/ci.yml/badge.svg)](https://github.com/mrcl29/lastfm/actions/workflows/ci.yml)
+[![CI](https://github.com/mrcl29/go-lastfm-client/actions/workflows/ci.yml/badge.svg)](https://github.com/mrcl29/lastfm/actions/workflows/ci.yml)
 
 A professional, feature-rich, and idiomatic Go client for the [Last.fm API](https://www.last.fm/api).
 
