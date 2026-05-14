@@ -6,7 +6,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/mrcl29/go-lastfm-client"
+	golastfmclient "github.com/mrcl29/go-lastfm-client"
 )
 
 func main() {
@@ -30,7 +30,9 @@ func main() {
 	authURL := client.Auth.AuthURL(token)
 	fmt.Printf("Please authorize the application by visiting this URL:\n%s\n\n", authURL)
 	fmt.Println("Press Enter after you have authorized the application...")
-	fmt.Scanln()
+	if _, err := fmt.Scanln(); err != nil {
+		log.Fatalf("Error reading input: %v", err)
+	}
 
 	// 3. Get the session
 	session, err := client.Auth.GetSession(ctx, token)
