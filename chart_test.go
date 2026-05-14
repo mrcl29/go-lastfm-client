@@ -27,11 +27,13 @@ func TestChartService_GetTopArtists(t *testing.T) {
 	}
 
 	service := golastfmclient.NewChartService(mock)
-	res, err := service.GetTopArtists(context.Background(), nil)
+	res, attr, err := service.GetTopArtists(context.Background(), nil)
 
 	assert.NoError(t, err)
-	assert.Equal(t, "Cher", res.Artists.Artist[0].Name)
-	assert.Equal(t, json.Number("100"), res.Artists.Artist[0].Listeners)
+	assert.Len(t, res, 1)
+	assert.Equal(t, "Cher", res[0].Name)
+	assert.Equal(t, json.Number("100"), res[0].Listeners)
+	assert.Equal(t, "1", attr.Total.String())
 }
 
 func TestChartService_GetTopTags(t *testing.T) {
@@ -51,10 +53,12 @@ func TestChartService_GetTopTags(t *testing.T) {
 	}
 
 	service := golastfmclient.NewChartService(mock)
-	res, err := service.GetTopTags(context.Background(), nil)
+	res, attr, err := service.GetTopTags(context.Background(), nil)
 
 	assert.NoError(t, err)
-	assert.Equal(t, "pop", res.Tags.Tag[0].Name)
+	assert.Len(t, res, 1)
+	assert.Equal(t, "pop", res[0].Name)
+	assert.Equal(t, "1", attr.Total.String())
 }
 
 func TestChartService_GetTopTracks(t *testing.T) {
@@ -74,11 +78,12 @@ func TestChartService_GetTopTracks(t *testing.T) {
 	}
 
 	service := golastfmclient.NewChartService(mock)
-	res, err := service.GetTopTracks(context.Background(), nil)
+	res, attr, err := service.GetTopTracks(context.Background(), nil)
 
 	assert.NoError(t, err)
-	assert.Equal(t, "Believe", res.Tracks.Track[0].Name)
-	// res.Tracks.Track[0].Artist is interface{} in models.go
-	artistMap := res.Tracks.Track[0].Artist.(map[string]interface{})
+	assert.Len(t, res, 1)
+	assert.Equal(t, "Believe", res[0].Name)
+	artistMap := res[0].Artist.(map[string]interface{})
 	assert.Equal(t, "Cher", artistMap["name"])
+	assert.Equal(t, "1", attr.Total.String())
 }

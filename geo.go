@@ -17,48 +17,66 @@ func NewGeoService(client APIClient) *GeoService {
 
 // GetTopArtists gets the most popular artists on Last.fm by country.
 // See: http://www.last.fm/api/show/geo.getTopArtists
-func (s *GeoService) GetTopArtists(ctx context.Context, country string, options url.Values) (*GeoGetTopArtistsResponse, error) {
+//
+// Parameters:
+//   - ctx: Context for the request.
+//   - country: A country name, as defined by the ISO 3166-1 country names standard.
+//   - options: Additional options (e.g. page, limit).
+//
+// Returns:
+//   - ArtistList: A slice of top artists.
+//   - *Attr: Pagination and metadata.
+//   - error: Error if the request fails.
+func (s *GeoService) GetTopArtists(ctx context.Context, country string, options url.Values) (ArtistList, *Attr, error) {
 	params := url.Values{}
 	for k, v := range options {
 		params[k] = v
 	}
 	params.Set("country", country)
 
-	var resp GeoGetTopArtistsResponse
+	var resp geoGetTopArtistsResponse
 	err := s.client.Call(ctx, "GET", "geo.getTopArtists", params, &resp)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
-	return &resp, nil
+	return resp.TopArtists.Artist, &resp.TopArtists.Attr, nil
 }
 
 // GetTopTracks gets the most popular tracks on Last.fm last week by country.
 // See: http://www.last.fm/api/show/geo.getTopTracks
-func (s *GeoService) GetTopTracks(ctx context.Context, country string, options url.Values) (*GeoGetTopTracksResponse, error) {
+//
+// Parameters:
+//   - ctx: Context for the request.
+//   - country: A country name, as defined by the ISO 3166-1 country names standard.
+//   - options: Additional options (e.g. page, limit, location).
+//
+// Returns:
+//   - TrackList: A slice of top tracks.
+//   - *Attr: Pagination and metadata.
+//   - error: Error if the request fails.
+func (s *GeoService) GetTopTracks(ctx context.Context, country string, options url.Values) (TrackList, *Attr, error) {
 	params := url.Values{}
 	for k, v := range options {
 		params[k] = v
 	}
 	params.Set("country", country)
 
-	var resp GeoGetTopTracksResponse
+	var resp geoGetTopTracksResponse
 	err := s.client.Call(ctx, "GET", "geo.getTopTracks", params, &resp)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
-	return &resp, nil
+	return resp.Tracks.Track, &resp.Tracks.Attr, nil
 }
 
-// GeoGetTopArtistsResponse is the response from geo.getTopArtists.
-type GeoGetTopArtistsResponse struct {
+type geoGetTopArtistsResponse struct {
 	TopArtists struct {
 		Artist ArtistList `json:"artist"`
 		Attr   Attr       `json:"@attr"`
 	} `json:"topartists"`
 }
 
-// GeoGetTopTracksResponse is the response from geo.getTopTracks.
-type GeoGetTopTracksResponse struct {
+type geoGetTopTracksResponse struct {
 	Tracks struct {
 		Track TrackList `json:"track"`
 		Attr  Attr      `json:"@attr"`

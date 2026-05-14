@@ -33,8 +33,8 @@ func TestAlbumService_GetInfo(t *testing.T) {
 	res, err := service.GetInfo(context.Background(), "Cher", "Believe", nil)
 
 	assert.NoError(t, err)
-	assert.Equal(t, "Believe", res.Album.Name)
-	assert.Equal(t, "1000", res.Album.Playcount.String())
+	assert.Equal(t, "Believe", res.Name)
+	assert.Equal(t, "1000", res.Playcount.String())
 }
 
 func TestAlbumService_Search(t *testing.T) {
@@ -62,8 +62,8 @@ func TestAlbumService_Search(t *testing.T) {
 	res, err := service.Search(context.Background(), "Believe", nil)
 
 	assert.NoError(t, err)
-	assert.Len(t, res.Results.AlbumMatches.Album, 1)
-	assert.Equal(t, "Believe", res.Results.AlbumMatches.Album[0].Name)
+	assert.Len(t, res, 1)
+	assert.Equal(t, "Believe", res[0].Name)
 }
 
 func TestAlbumService_GetTags(t *testing.T) {
@@ -90,7 +90,7 @@ func TestAlbumService_GetTags(t *testing.T) {
 	res, err := service.GetTags(context.Background(), "Cher", "Believe", nil)
 
 	assert.NoError(t, err)
-	assert.Equal(t, "pop", res.Tags.Tag[0].Name)
+	assert.Equal(t, "pop", res[0].Name)
 }
 
 func TestAlbumService_GetTopTags(t *testing.T) {
@@ -117,8 +117,8 @@ func TestAlbumService_GetTopTags(t *testing.T) {
 	res, err := service.GetTopTags(context.Background(), "Cher", "Believe", nil)
 
 	assert.NoError(t, err)
-	assert.Equal(t, "pop", res.TopTags.Tag[0].Name)
-	assert.Equal(t, "100", res.TopTags.Tag[0].Count.String())
+	assert.Equal(t, "pop", res[0].Name)
+	assert.Equal(t, "100", res[0].Count.String())
 }
 
 func TestAlbumService_AddTags(t *testing.T) {

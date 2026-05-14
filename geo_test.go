@@ -28,11 +28,12 @@ func TestGeoService_GetTopArtists(t *testing.T) {
 	}
 
 	service := golastfmclient.NewGeoService(mock)
-	res, err := service.GetTopArtists(context.Background(), "Spain", nil)
+	res, attr, err := service.GetTopArtists(context.Background(), "Spain", nil)
 
 	assert.NoError(t, err)
-	assert.Equal(t, "Cher", res.TopArtists.Artist[0].Name)
-	assert.Equal(t, "Spain", res.TopArtists.Attr.Country)
+	assert.Len(t, res, 1)
+	assert.Equal(t, "Cher", res[0].Name)
+	assert.Equal(t, "Spain", attr.Country)
 }
 
 func TestGeoService_GetTopTracks(t *testing.T) {
@@ -54,9 +55,10 @@ func TestGeoService_GetTopTracks(t *testing.T) {
 	}
 
 	service := golastfmclient.NewGeoService(mock)
-	res, err := service.GetTopTracks(context.Background(), "Spain", nil)
+	res, attr, err := service.GetTopTracks(context.Background(), "Spain", nil)
 
 	assert.NoError(t, err)
-	assert.Equal(t, "Believe", res.Tracks.Track[0].Name)
-	assert.Equal(t, "Spain", res.Tracks.Attr.Country)
+	assert.Len(t, res, 1)
+	assert.Equal(t, "Believe", res[0].Name)
+	assert.Equal(t, "Spain", attr.Country)
 }

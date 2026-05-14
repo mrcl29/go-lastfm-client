@@ -31,13 +31,13 @@ func TestTrackService_GetInfo(t *testing.T) {
 	}
 
 	service := golastfmclient.NewTrackService(mock)
-	res, err := service.GetInfo(context.Background(), "Cher", "Believe", nil)
+	track, err := service.GetInfo(context.Background(), "Cher", "Believe", nil)
 
 	assert.NoError(t, err)
-	assert.Equal(t, "Believe", res.Track.Name)
-	// res.Track.Artist is interface{} in unified models, so we need to check carefully or cast
+	assert.Equal(t, "Believe", track.Name)
+	// track.Artist is interface{} in unified models, so we need to check carefully or cast
 	// In the JSON above, it's a map/struct.
-	artistMap := res.Track.Artist.(map[string]interface{})
+	artistMap := track.Artist.(map[string]interface{})
 	assert.Equal(t, "Cher", artistMap["name"])
 }
 
@@ -63,11 +63,11 @@ func TestTrackService_Search(t *testing.T) {
 	}
 
 	service := golastfmclient.NewTrackService(mock)
-	res, err := service.Search(context.Background(), "Believe", nil)
+	tracks, err := service.Search(context.Background(), "Believe", nil)
 
 	assert.NoError(t, err)
-	assert.Len(t, res.Results.TrackMatches.Track, 1)
-	assert.Equal(t, "Believe", res.Results.TrackMatches.Track[0].Name)
+	assert.Len(t, tracks, 1)
+	assert.Equal(t, "Believe", tracks[0].Name)
 }
 
 func TestTrackService_Scrobble(t *testing.T) {
@@ -96,10 +96,11 @@ func TestTrackService_Scrobble(t *testing.T) {
 	}
 
 	service := golastfmclient.NewTrackService(mock)
-	res, err := service.Scrobble(context.Background(), "Cher", "Believe", 123456789, nil)
+	scrobbles, err := service.Scrobble(context.Background(), "Cher", "Believe", 123456789, nil)
 
 	assert.NoError(t, err)
-	assert.Equal(t, 1, res.Scrobbles.Attr.Accepted)
+	assert.Len(t, scrobbles, 1)
+	assert.Equal(t, "Believe", scrobbles[0].Track.Text)
 }
 
 func TestTrackService_UpdateNowPlaying(t *testing.T) {
@@ -125,7 +126,7 @@ func TestTrackService_UpdateNowPlaying(t *testing.T) {
 	res, err := service.UpdateNowPlaying(context.Background(), "Cher", "Believe", nil)
 
 	assert.NoError(t, err)
-	assert.Equal(t, "Believe", res.NowPlaying.Track.Text)
+	assert.Equal(t, "Believe", res.Track.Text)
 }
 
 func TestTrackService_Love(t *testing.T) {
@@ -183,11 +184,11 @@ func TestTrackService_GetTags(t *testing.T) {
 	}
 
 	service := golastfmclient.NewTrackService(mock)
-	res, err := service.GetTags(context.Background(), "Cher", "Believe", nil)
+	tags, err := service.GetTags(context.Background(), "Cher", "Believe", nil)
 
 	assert.NoError(t, err)
-	assert.Len(t, res.Tags.Tag, 1)
-	assert.Equal(t, "pop", res.Tags.Tag[0].Name)
+	assert.Len(t, tags, 1)
+	assert.Equal(t, "pop", tags[0].Name)
 }
 
 func TestTrackService_GetTopTags(t *testing.T) {
@@ -211,11 +212,11 @@ func TestTrackService_GetTopTags(t *testing.T) {
 	}
 
 	service := golastfmclient.NewTrackService(mock)
-	res, err := service.GetTopTags(context.Background(), "Cher", "Believe", nil)
+	tags, err := service.GetTopTags(context.Background(), "Cher", "Believe", nil)
 
 	assert.NoError(t, err)
-	assert.Len(t, res.TopTags.Tag, 1)
-	assert.Equal(t, "pop", res.TopTags.Tag[0].Name)
+	assert.Len(t, tags, 1)
+	assert.Equal(t, "pop", tags[0].Name)
 }
 
 func TestTrackService_GetCorrection(t *testing.T) {
@@ -239,10 +240,10 @@ func TestTrackService_GetCorrection(t *testing.T) {
 	}
 
 	service := golastfmclient.NewTrackService(mock)
-	res, err := service.GetCorrection(context.Background(), "Cher", "Believe")
+	track, err := service.GetCorrection(context.Background(), "Cher", "Believe")
 
 	assert.NoError(t, err)
-	assert.Equal(t, "Believe", res.Corrections.Correction.Track.Name)
+	assert.Equal(t, "Believe", track.Name)
 }
 
 func TestTrackService_GetSimilar(t *testing.T) {
@@ -267,9 +268,9 @@ func TestTrackService_GetSimilar(t *testing.T) {
 	}
 
 	service := golastfmclient.NewTrackService(mock)
-	res, err := service.GetSimilar(context.Background(), "Cher", "Believe", nil)
+	tracks, err := service.GetSimilar(context.Background(), "Cher", "Believe", nil)
 
 	assert.NoError(t, err)
-	assert.Len(t, res.SimilarTracks.Track, 1)
-	assert.Equal(t, "Strong Enough", res.SimilarTracks.Track[0].Name)
+	assert.Len(t, tracks, 1)
+	assert.Equal(t, "Strong Enough", tracks[0].Name)
 }

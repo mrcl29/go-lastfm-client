@@ -32,7 +32,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error updating now playing: %v", err)
 	}
-	fmt.Printf("Now playing updated: %s\n", np.NowPlaying.Track.Text)
+	fmt.Printf("Now playing updated: %s\n", np.Track.Text)
 
 	// 2. Scrobble the track
 	timestamp := time.Now().Unix()
@@ -41,7 +41,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error scrobbling: %v", err)
 	}
-	fmt.Printf("Scrobble accepted: %d\n", scr.Scrobbles.Attr.Accepted)
+	fmt.Printf("Scrobble accepted for track: %s\n", scr[0].Track.Text)
 
 	// 3. Love the track
 	fmt.Printf("Loving the track: %s - %s...\n", artist, track)

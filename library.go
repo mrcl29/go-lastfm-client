@@ -17,23 +17,32 @@ func NewLibraryService(client APIClient) *LibraryService {
 
 // GetArtists gets a paginated list of all the artists in a user's library.
 // See: http://www.last.fm/api/show/library.getArtists
-func (s *LibraryService) GetArtists(ctx context.Context, user string, options url.Values) (*LibraryGetArtistsResponse, error) {
+//
+// Parameters:
+//   - ctx: Context for the request.
+//   - user: The user name.
+//   - options: Additional options (e.g. page, limit).
+//
+// Returns:
+//   - ArtistList: A slice of artists in the user's library.
+//   - *Attr: Pagination metadata.
+//   - error: Error if the request fails.
+func (s *LibraryService) GetArtists(ctx context.Context, user string, options url.Values) (ArtistList, *Attr, error) {
 	params := url.Values{}
 	for k, v := range options {
 		params[k] = v
 	}
 	params.Set("user", user)
 
-	var resp LibraryGetArtistsResponse
+	var resp libraryGetArtistsResponse
 	err := s.client.Call(ctx, "GET", "library.getArtists", params, &resp)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
-	return &resp, nil
+	return resp.Artists.Artist, &resp.Artists.Attr, nil
 }
 
-// LibraryGetArtistsResponse is the response from library.getArtists.
-type LibraryGetArtistsResponse struct {
+type libraryGetArtistsResponse struct {
 	Artists struct {
 		Artist ArtistList `json:"artist"`
 		Attr   Attr       `json:"@attr"`

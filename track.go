@@ -20,7 +20,17 @@ func NewTrackService(client APIClient) *TrackService {
 
 // GetInfo gets the metadata for a track.
 // See: http://www.last.fm/api/show/track.getInfo
-func (s *TrackService) GetInfo(ctx context.Context, artist, track string, options url.Values) (*TrackGetInfoResponse, error) {
+//
+// Parameters:
+//   - ctx: Context for the request.
+//   - artist: The artist name.
+//   - track: The track name.
+//   - options: Additional options (e.g. mbid, username, autocorrect).
+//
+// Returns:
+//   - *Track: The track details.
+//   - error: Error if the request fails.
+func (s *TrackService) GetInfo(ctx context.Context, artist, track string, options url.Values) (*Track, error) {
 	params := url.Values{}
 	for k, v := range options {
 		params[k] = v
@@ -28,34 +38,54 @@ func (s *TrackService) GetInfo(ctx context.Context, artist, track string, option
 	params.Set("artist", artist)
 	params.Set("track", track)
 
-	var resp TrackGetInfoResponse
+	var resp trackGetInfoResponse
 	err := s.client.Call(ctx, "GET", "track.getInfo", params, &resp)
 	if err != nil {
 		return nil, err
 	}
-	return &resp, nil
+	return &resp.Track, nil
 }
 
 // Search searches for a track by name.
 // See: http://www.last.fm/api/show/track.search
-func (s *TrackService) Search(ctx context.Context, track string, options url.Values) (*TrackSearchResponse, error) {
+//
+// Parameters:
+//   - ctx: Context for the request.
+//   - track: The track name to search for.
+//   - options: Additional options (e.g. artist, page, limit).
+//
+// Returns:
+//   - TrackList: A slice of tracks matching the search.
+//   - error: Error if the request fails.
+func (s *TrackService) Search(ctx context.Context, track string, options url.Values) (TrackList, error) {
 	params := url.Values{}
 	for k, v := range options {
 		params[k] = v
 	}
 	params.Set("track", track)
 
-	var resp TrackSearchResponse
+	var resp trackSearchResponse
 	err := s.client.Call(ctx, "GET", "track.search", params, &resp)
 	if err != nil {
 		return nil, err
 	}
-	return &resp, nil
+	return resp.Results.TrackMatches.Track, nil
 }
 
 // Scrobble adds a track-play to a user's profile.
 // See: http://www.last.fm/api/show/track.scrobble
-func (s *TrackService) Scrobble(ctx context.Context, artist, track string, timestamp int64, options url.Values) (*TrackScrobbleResponse, error) {
+//
+// Parameters:
+//   - ctx: Context for the request.
+//   - artist: The artist name.
+//   - track: The track name.
+//   - timestamp: The time the track started playing (Unix timestamp).
+//   - options: Additional options (e.g. album, trackNumber, context, streamId, albumArtist).
+//
+// Returns:
+//   - ScrobbleResults: Results of the scrobble request.
+//   - error: Error if the request fails.
+func (s *TrackService) Scrobble(ctx context.Context, artist, track string, timestamp int64, options url.Values) (ScrobbleResults, error) {
 	params := url.Values{}
 	for k, v := range options {
 		params[k] = v
@@ -64,17 +94,27 @@ func (s *TrackService) Scrobble(ctx context.Context, artist, track string, times
 	params.Set("track", track)
 	params.Set("timestamp", strconv.FormatInt(timestamp, 10))
 
-	var resp TrackScrobbleResponse
+	var resp trackScrobbleResponse
 	err := s.client.Call(ctx, "POST", "track.scrobble", params, &resp)
 	if err != nil {
 		return nil, err
 	}
-	return &resp, nil
+	return resp.Scrobbles.Scrobble, nil
 }
 
 // UpdateNowPlaying notifies Last.fm that a user has started listening to a track.
 // See: http://www.last.fm/api/show/track.updateNowPlaying
-func (s *TrackService) UpdateNowPlaying(ctx context.Context, artist, track string, options url.Values) (*TrackNowPlayingResponse, error) {
+//
+// Parameters:
+//   - ctx: Context for the request.
+//   - artist: The artist name.
+//   - track: The track name.
+//   - options: Additional options (e.g. album, trackNumber, context, albumArtist).
+//
+// Returns:
+//   - *ScrobbleResult: Result of the now playing update.
+//   - error: Error if the request fails.
+func (s *TrackService) UpdateNowPlaying(ctx context.Context, artist, track string, options url.Values) (*ScrobbleResult, error) {
 	params := url.Values{}
 	for k, v := range options {
 		params[k] = v
@@ -82,16 +122,25 @@ func (s *TrackService) UpdateNowPlaying(ctx context.Context, artist, track strin
 	params.Set("artist", artist)
 	params.Set("track", track)
 
-	var resp TrackNowPlayingResponse
+	var resp trackNowPlayingResponse
 	err := s.client.Call(ctx, "POST", "track.updateNowPlaying", params, &resp)
 	if err != nil {
 		return nil, err
 	}
-	return &resp, nil
+	return (*ScrobbleResult)(&resp.NowPlaying), nil
 }
 
 // AddTags tags a track using a list of user supplied tags.
 // See: http://www.last.fm/api/show/track.addTags
+//
+// Parameters:
+//   - ctx: Context for the request.
+//   - artist: The artist name.
+//   - track: The track name.
+//   - tags: A comma-separated list of tags to apply.
+//
+// Returns:
+//   - error: Error if the request fails.
 func (s *TrackService) AddTags(ctx context.Context, artist, track, tags string) error {
 	params := url.Values{}
 	params.Set("artist", artist)
@@ -103,6 +152,15 @@ func (s *TrackService) AddTags(ctx context.Context, artist, track, tags string) 
 
 // RemoveTag removes a user supplied tag from a track.
 // See: http://www.last.fm/api/show/track.removeTag
+//
+// Parameters:
+//   - ctx: Context for the request.
+//   - artist: The artist name.
+//   - track: The track name.
+//   - tag: A single tag to remove.
+//
+// Returns:
+//   - error: Error if the request fails.
 func (s *TrackService) RemoveTag(ctx context.Context, artist, track, tag string) error {
 	params := url.Values{}
 	params.Set("artist", artist)
@@ -114,7 +172,17 @@ func (s *TrackService) RemoveTag(ctx context.Context, artist, track, tag string)
 
 // GetTags gets the tags applied by an individual user to a track.
 // See: http://www.last.fm/api/show/track.getTags
-func (s *TrackService) GetTags(ctx context.Context, artist, track string, options url.Values) (*TrackGetTagsResponse, error) {
+//
+// Parameters:
+//   - ctx: Context for the request.
+//   - artist: The artist name.
+//   - track: The track name.
+//   - options: Additional options (e.g. user, mbid, autocorrect).
+//
+// Returns:
+//   - TagList: A slice of tags applied by the user.
+//   - error: Error if the request fails.
+func (s *TrackService) GetTags(ctx context.Context, artist, track string, options url.Values) (TagList, error) {
 	params := url.Values{}
 	for k, v := range options {
 		params[k] = v
@@ -122,17 +190,27 @@ func (s *TrackService) GetTags(ctx context.Context, artist, track string, option
 	params.Set("artist", artist)
 	params.Set("track", track)
 
-	var resp TrackGetTagsResponse
+	var resp trackGetTagsResponse
 	err := s.client.Call(ctx, "GET", "track.getTags", params, &resp)
 	if err != nil {
 		return nil, err
 	}
-	return &resp, nil
+	return resp.Tags.Tag, nil
 }
 
 // GetTopTags gets the top tags for a track.
 // See: http://www.last.fm/api/show/track.getTopTags
-func (s *TrackService) GetTopTags(ctx context.Context, artist, track string, options url.Values) (*TrackGetTopTagsResponse, error) {
+//
+// Parameters:
+//   - ctx: Context for the request.
+//   - artist: The artist name.
+//   - track: The track name.
+//   - options: Additional options (e.g. mbid, autocorrect).
+//
+// Returns:
+//   - TagList: A slice of top tags for the track.
+//   - error: Error if the request fails.
+func (s *TrackService) GetTopTags(ctx context.Context, artist, track string, options url.Values) (TagList, error) {
 	params := url.Values{}
 	for k, v := range options {
 		params[k] = v
@@ -140,32 +218,51 @@ func (s *TrackService) GetTopTags(ctx context.Context, artist, track string, opt
 	params.Set("artist", artist)
 	params.Set("track", track)
 
-	var resp TrackGetTopTagsResponse
+	var resp trackGetTopTagsResponse
 	err := s.client.Call(ctx, "GET", "track.getTopTags", params, &resp)
 	if err != nil {
 		return nil, err
 	}
-	return &resp, nil
+	return resp.TopTags.Tag, nil
 }
 
 // GetCorrection gets the corrected artist/track names.
 // See: http://www.last.fm/api/show/track.getCorrection
-func (s *TrackService) GetCorrection(ctx context.Context, artist, track string) (*TrackGetCorrectionResponse, error) {
+//
+// Parameters:
+//   - ctx: Context for the request.
+//   - artist: The artist name.
+//   - track: The track name.
+//
+// Returns:
+//   - *Track: The corrected track details.
+//   - error: Error if the request fails.
+func (s *TrackService) GetCorrection(ctx context.Context, artist, track string) (*Track, error) {
 	params := url.Values{}
 	params.Set("artist", artist)
 	params.Set("track", track)
 
-	var resp TrackGetCorrectionResponse
+	var resp trackGetCorrectionResponse
 	err := s.client.Call(ctx, "GET", "track.getCorrection", params, &resp)
 	if err != nil {
 		return nil, err
 	}
-	return &resp, nil
+	return &resp.Corrections.Correction.Track, nil
 }
 
 // GetSimilar gets similar tracks.
 // See: http://www.last.fm/api/show/track.getSimilar
-func (s *TrackService) GetSimilar(ctx context.Context, artist, track string, options url.Values) (*TrackGetSimilarResponse, error) {
+//
+// Parameters:
+//   - ctx: Context for the request.
+//   - artist: The artist name.
+//   - track: The track name.
+//   - options: Additional options (e.g. limit, mbid, autocorrect).
+//
+// Returns:
+//   - TrackList: A slice of similar tracks.
+//   - error: Error if the request fails.
+func (s *TrackService) GetSimilar(ctx context.Context, artist, track string, options url.Values) (TrackList, error) {
 	params := url.Values{}
 	for k, v := range options {
 		params[k] = v
@@ -173,16 +270,24 @@ func (s *TrackService) GetSimilar(ctx context.Context, artist, track string, opt
 	params.Set("artist", artist)
 	params.Set("track", track)
 
-	var resp TrackGetSimilarResponse
+	var resp trackGetSimilarResponse
 	err := s.client.Call(ctx, "GET", "track.getSimilar", params, &resp)
 	if err != nil {
 		return nil, err
 	}
-	return &resp, nil
+	return resp.SimilarTracks.Track, nil
 }
 
 // Love loves a track.
 // See: http://www.last.fm/api/show/track.love
+//
+// Parameters:
+//   - ctx: Context for the request.
+//   - artist: The artist name.
+//   - track: The track name.
+//
+// Returns:
+//   - error: Error if the request fails.
 func (s *TrackService) Love(ctx context.Context, artist, track string) error {
 	params := url.Values{}
 	params.Set("artist", artist)
@@ -193,6 +298,14 @@ func (s *TrackService) Love(ctx context.Context, artist, track string) error {
 
 // Unlove unloves a track.
 // See: http://www.last.fm/api/show/track.unlove
+//
+// Parameters:
+//   - ctx: Context for the request.
+//   - artist: The artist name.
+//   - track: The track name.
+//
+// Returns:
+//   - error: Error if the request fails.
 func (s *TrackService) Unlove(ctx context.Context, artist, track string) error {
 	params := url.Values{}
 	params.Set("artist", artist)
@@ -201,13 +314,11 @@ func (s *TrackService) Unlove(ctx context.Context, artist, track string) error {
 	return s.client.Call(ctx, "POST", "track.unlove", params, nil)
 }
 
-// TrackGetInfoResponse is the response from track.getInfo.
-type TrackGetInfoResponse struct {
+type trackGetInfoResponse struct {
 	Track Track `json:"track"`
 }
 
-// TrackSearchResponse is the response from track.search.
-type TrackSearchResponse struct {
+type trackSearchResponse struct {
 	Results struct {
 		TrackMatches struct {
 			Track TrackList `json:"track"`
@@ -215,51 +326,48 @@ type TrackSearchResponse struct {
 	} `json:"results"`
 }
 
-// TrackScrobbleResponse is the response from track.scrobble.
-type TrackScrobbleResponse struct {
+type trackScrobbleResponse struct {
 	Scrobbles struct {
-		Scrobble ScrobbleResults `json:"scrobble"`
-		Attr     struct {
-			Accepted int `json:"accepted"`
-			Ignored  int `json:"ignored"`
-		} `json:"@attr"`
+		Scrobble Scrobbles `json:"scrobble"`
 	} `json:"scrobbles"`
 }
 
-// ScrobbleResults is a slice of ScrobbleResult that handles both a single object and an array in JSON.
-type ScrobbleResults []ScrobbleResult
+// Scrobbles is a slice of ScrobbleResult that handles both a single object and an array in JSON.
+type Scrobbles []ScrobbleResult
 
 // UnmarshalJSON implements json.Unmarshaler.
-func (s *ScrobbleResults) UnmarshalJSON(data []byte) error {
+func (s *Scrobbles) UnmarshalJSON(data []byte) error {
 	return jsonutil.UnmarshalList(data, (*[]ScrobbleResult)(s))
 }
 
+// ScrobbleResults is an alias for Scrobbles for backward compatibility or clarity.
+type ScrobbleResults = Scrobbles
+
 // ScrobbleResult represents the result of a single scrobble.
 type ScrobbleResult struct {
-	Artist    TrackCorrectionEntity `json:"artist"`
-	Album     TrackCorrectionEntity `json:"album"`
-	Track     TrackCorrectionEntity `json:"track"`
+	Artist    trackCorrectionEntity `json:"artist"`
+	Album     trackCorrectionEntity `json:"album"`
+	Track     trackCorrectionEntity `json:"track"`
 	Timestamp string                `json:"timestamp"`
 }
 
-// TrackCorrectionEntity represents corrected metadata in a scrobble response.
-type TrackCorrectionEntity struct {
+type trackCorrectionEntity struct {
 	Text      string `json:"#text"`
 	Corrected string `json:"corrected"`
 }
 
-// TrackNowPlayingResponse is the response from track.updateNowPlaying.
-type TrackNowPlayingResponse struct {
-	NowPlaying struct {
-		Artist    TrackCorrectionEntity `json:"artist"`
-		Album     TrackCorrectionEntity `json:"album"`
-		Track     TrackCorrectionEntity `json:"track"`
-		Timestamp string                `json:"timestamp"`
-	} `json:"nowplaying"`
+type trackNowPlayingResponse struct {
+	NowPlaying trackNowPlayingResult `json:"nowplaying"`
 }
 
-// TrackGetTagsResponse is the response from track.getTags.
-type TrackGetTagsResponse struct {
+type trackNowPlayingResult struct {
+	Artist    trackCorrectionEntity `json:"artist"`
+	Album     trackCorrectionEntity `json:"album"`
+	Track     trackCorrectionEntity `json:"track"`
+	Timestamp string                `json:"timestamp"`
+}
+
+type trackGetTagsResponse struct {
 	Tags struct {
 		Tag    TagList `json:"tag"`
 		Artist string  `json:"artist"`
@@ -267,8 +375,7 @@ type TrackGetTagsResponse struct {
 	} `json:"tags"`
 }
 
-// TrackGetTopTagsResponse is the response from track.getTopTags.
-type TrackGetTopTagsResponse struct {
+type trackGetTopTagsResponse struct {
 	TopTags struct {
 		Tag    TagList `json:"tag"`
 		Artist string  `json:"artist"`
@@ -276,20 +383,17 @@ type TrackGetTopTagsResponse struct {
 	} `json:"toptags"`
 }
 
-// TrackGetCorrectionResponse is the response from track.getCorrection.
-type TrackGetCorrectionResponse struct {
+type trackGetCorrectionResponse struct {
 	Corrections struct {
-		Correction TrackCorrection `json:"correction"`
+		Correction trackCorrection `json:"correction"`
 	} `json:"corrections"`
 }
 
-// TrackCorrection represents a track correction.
-type TrackCorrection struct {
+type trackCorrection struct {
 	Track Track `json:"track"`
 }
 
-// TrackGetSimilarResponse is the response from track.getSimilar.
-type TrackGetSimilarResponse struct {
+type trackGetSimilarResponse struct {
 	SimilarTracks struct {
 		Track TrackList `json:"track"`
 		Attr  struct {

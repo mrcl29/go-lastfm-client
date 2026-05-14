@@ -29,11 +29,11 @@ func TestTagService_GetInfo(t *testing.T) {
 	}
 
 	service := golastfmclient.NewTagService(mock)
-	res, err := service.GetInfo(context.Background(), "disco", nil)
+	tag, err := service.GetInfo(context.Background(), "disco", nil)
 
 	assert.NoError(t, err)
-	assert.Equal(t, "disco", res.Tag.Name)
-	assert.Equal(t, json.Number("12345"), res.Tag.Reach)
+	assert.Equal(t, "disco", tag.Name)
+	assert.Equal(t, json.Number("12345"), tag.Reach)
 }
 
 func TestTagService_GetTopAlbums(t *testing.T) {
@@ -57,11 +57,12 @@ func TestTagService_GetTopAlbums(t *testing.T) {
 	}
 
 	service := golastfmclient.NewTagService(mock)
-	res, err := service.GetTopAlbums(context.Background(), "disco", nil)
+	albums, attr, err := service.GetTopAlbums(context.Background(), "disco", nil)
 
 	assert.NoError(t, err)
-	assert.Len(t, res.Albums.Album, 1)
-	assert.Equal(t, "Believe", res.Albums.Album[0].Name)
+	assert.Len(t, albums, 1)
+	assert.Equal(t, "Believe", albums[0].Name)
+	assert.Equal(t, "disco", attr.Tag)
 }
 
 func TestTagService_GetTopTags(t *testing.T) {
@@ -83,9 +84,9 @@ func TestTagService_GetTopTags(t *testing.T) {
 	}
 
 	service := golastfmclient.NewTagService(mock)
-	res, err := service.GetTopTags(context.Background(), nil)
+	tags, err := service.GetTopTags(context.Background(), nil)
 
 	assert.NoError(t, err)
-	assert.Len(t, res.TopTags.Tag, 1)
-	assert.Equal(t, "pop", res.TopTags.Tag[0].Name)
+	assert.Len(t, tags, 1)
+	assert.Equal(t, "pop", tags[0].Name)
 }

@@ -22,12 +22,12 @@ func main() {
 
 	// 1. Get Top Artists from Chart
 	fmt.Println("--- Top Artists Chart ---")
-	chart, err := client.Chart.GetTopArtists(ctx, nil)
+	chart, _, err := client.Chart.GetTopArtists(ctx, nil)
 	if err != nil {
 		log.Fatalf("Error getting top artists: %v", err)
 	}
 
-	for i, artist := range chart.Artists.Artist {
+	for i, artist := range chart {
 		if i >= 5 {
 			break
 		}
@@ -42,7 +42,7 @@ func main() {
 		log.Fatalf("Error getting similar artists: %v", err)
 	}
 
-	for i, artist := range similar.SimilarArtists.Artist {
+	for i, artist := range similar {
 		if i >= 5 {
 			break
 		}
@@ -54,12 +54,12 @@ func main() {
 	fmt.Printf("\n--- Top tracks tagged as '%s' ---\n", tagName)
 	options := url.Values{}
 	options.Set("limit", "5")
-	tagTracks, err := client.Tag.GetTopTracks(ctx, tagName, options)
+	tagTracks, _, err := client.Tag.GetTopTracks(ctx, tagName, options)
 	if err != nil {
 		log.Fatalf("Error getting top tracks for tag: %v", err)
 	}
 
-	for i, track := range tagTracks.Tracks.Track {
+	for i, track := range tagTracks {
 		name := ""
 		switch a := track.Artist.(type) {
 		case string:

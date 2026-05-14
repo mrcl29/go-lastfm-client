@@ -17,179 +17,226 @@ func NewTagService(client APIClient) *TagService {
 
 // GetInfo gets the metadata for a tag.
 // See: http://www.last.fm/api/show/tag.getInfo
-func (s *TagService) GetInfo(ctx context.Context, tag string, options url.Values) (*TagGetInfoResponse, error) {
+//
+// Parameters:
+//   - ctx: Context for the request.
+//   - tag: The tag name.
+//   - options: Additional options (e.g. lang).
+//
+// Returns:
+//   - *Tag: The tag details.
+//   - error: Error if the request fails.
+func (s *TagService) GetInfo(ctx context.Context, tag string, options url.Values) (*Tag, error) {
 	params := url.Values{}
 	for k, v := range options {
 		params[k] = v
 	}
 	params.Set("tag", tag)
 
-	var resp TagGetInfoResponse
+	var resp tagGetInfoResponse
 	err := s.client.Call(ctx, "GET", "tag.getInfo", params, &resp)
 	if err != nil {
 		return nil, err
 	}
-	return &resp, nil
+	return &resp.Tag, nil
 }
 
 // GetSimilar gets all the tags similar to this tag.
 // See: http://www.last.fm/api/show/tag.getSimilar
-func (s *TagService) GetSimilar(ctx context.Context, tag string, options url.Values) (*TagGetSimilarResponse, error) {
+//
+// Parameters:
+//   - ctx: Context for the request.
+//   - tag: The tag name.
+//   - options: Additional options.
+//
+// Returns:
+//   - TagList: A slice of similar tags.
+//   - error: Error if the request fails.
+func (s *TagService) GetSimilar(ctx context.Context, tag string, options url.Values) (TagList, error) {
 	params := url.Values{}
 	for k, v := range options {
 		params[k] = v
 	}
 	params.Set("tag", tag)
 
-	var resp TagGetSimilarResponse
+	var resp tagGetSimilarResponse
 	err := s.client.Call(ctx, "GET", "tag.getSimilar", params, &resp)
 	if err != nil {
 		return nil, err
 	}
-	return &resp, nil
+	return resp.SimilarTags.Tag, nil
 }
 
 // GetTopAlbums gets the top albums for a tag.
 // See: http://www.last.fm/api/show/tag.getTopAlbums
-func (s *TagService) GetTopAlbums(ctx context.Context, tag string, options url.Values) (*TagGetTopAlbumsResponse, error) {
+//
+// Parameters:
+//   - ctx: Context for the request.
+//   - tag: The tag name.
+//   - options: Additional options (e.g. page, limit).
+//
+// Returns:
+//   - AlbumList: A slice of top albums for the tag.
+//   - *Attr: Pagination metadata.
+//   - error: Error if the request fails.
+func (s *TagService) GetTopAlbums(ctx context.Context, tag string, options url.Values) (AlbumList, *Attr, error) {
 	params := url.Values{}
 	for k, v := range options {
 		params[k] = v
 	}
 	params.Set("tag", tag)
 
-	var resp TagGetTopAlbumsResponse
+	var resp tagGetTopAlbumsResponse
 	err := s.client.Call(ctx, "GET", "tag.getTopAlbums", params, &resp)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
-	return &resp, nil
+	return resp.Albums.Album, &resp.Albums.Attr, nil
 }
 
 // GetTopArtists gets the top artists for a tag.
 // See: http://www.last.fm/api/show/tag.getTopArtists
-func (s *TagService) GetTopArtists(ctx context.Context, tag string, options url.Values) (*TagGetTopArtistsResponse, error) {
+//
+// Parameters:
+//   - ctx: Context for the request.
+//   - tag: The tag name.
+//   - options: Additional options (e.g. page, limit).
+//
+// Returns:
+//   - ArtistList: A slice of top artists for the tag.
+//   - *Attr: Pagination metadata.
+//   - error: Error if the request fails.
+func (s *TagService) GetTopArtists(ctx context.Context, tag string, options url.Values) (ArtistList, *Attr, error) {
 	params := url.Values{}
 	for k, v := range options {
 		params[k] = v
 	}
 	params.Set("tag", tag)
 
-	var resp TagGetTopArtistsResponse
+	var resp tagGetTopArtistsResponse
 	err := s.client.Call(ctx, "GET", "tag.getTopArtists", params, &resp)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
-	return &resp, nil
+	return resp.TopArtists.Artist, &resp.TopArtists.Attr, nil
 }
 
 // GetTopTags gets the top tags on Last.fm.
 // See: http://www.last.fm/api/show/tag.getTopTags
-func (s *TagService) GetTopTags(ctx context.Context, options url.Values) (*TagGetTopTagsResponse, error) {
+//
+// Parameters:
+//   - ctx: Context for the request.
+//   - options: Additional options (e.g. page, limit).
+//
+// Returns:
+//   - TagList: A slice of top tags.
+//   - error: Error if the request fails.
+func (s *TagService) GetTopTags(ctx context.Context, options url.Values) (TagList, error) {
 	params := url.Values{}
 	for k, v := range options {
 		params[k] = v
 	}
 
-	var resp TagGetTopTagsResponse
+	var resp tagGetTopTagsResponse
 	err := s.client.Call(ctx, "GET", "tag.getTopTags", params, &resp)
 	if err != nil {
 		return nil, err
 	}
-	return &resp, nil
+	return resp.TopTags.Tag, nil
 }
 
 // GetTopTracks gets the top tracks for a tag.
 // See: http://www.last.fm/api/show/tag.getTopTracks
-func (s *TagService) GetTopTracks(ctx context.Context, tag string, options url.Values) (*TagGetTopTracksResponse, error) {
+//
+// Parameters:
+//   - ctx: Context for the request.
+//   - tag: The tag name.
+//   - options: Additional options (e.g. page, limit).
+//
+// Returns:
+//   - TrackList: A slice of top tracks for the tag.
+//   - *Attr: Pagination metadata.
+//   - error: Error if the request fails.
+func (s *TagService) GetTopTracks(ctx context.Context, tag string, options url.Values) (TrackList, *Attr, error) {
 	params := url.Values{}
 	for k, v := range options {
 		params[k] = v
 	}
 	params.Set("tag", tag)
 
-	var resp TagGetTopTracksResponse
+	var resp tagGetTopTracksResponse
 	err := s.client.Call(ctx, "GET", "tag.getTopTracks", params, &resp)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
-	return &resp, nil
+	return resp.Tracks.Track, &resp.Tracks.Attr, nil
 }
 
 // GetWeeklyChartList gets a list of available charts for this tag.
 // See: http://www.last.fm/api/show/tag.getWeeklyChartList
-func (s *TagService) GetWeeklyChartList(ctx context.Context, tag string, options url.Values) (*TagGetWeeklyChartListResponse, error) {
+//
+// Parameters:
+//   - ctx: Context for the request.
+//   - tag: The tag name.
+//   - options: Additional options.
+//
+// Returns:
+//   - ChartList: A slice of available charts.
+//   - error: Error if the request fails.
+func (s *TagService) GetWeeklyChartList(ctx context.Context, tag string, options url.Values) (ChartList, error) {
 	params := url.Values{}
 	for k, v := range options {
 		params[k] = v
 	}
 	params.Set("tag", tag)
 
-	var resp TagGetWeeklyChartListResponse
+	var resp tagGetWeeklyChartListResponse
 	err := s.client.Call(ctx, "GET", "tag.getWeeklyChartList", params, &resp)
 	if err != nil {
 		return nil, err
 	}
-	return &resp, nil
+	return resp.WeeklyChartList.Chart, nil
 }
 
-// TagGetInfoResponse is the response from tag.getInfo.
-type TagGetInfoResponse struct {
+type tagGetInfoResponse struct {
 	Tag Tag `json:"tag"`
 }
 
-// TagGetSimilarResponse is the response from tag.getSimilar.
-type TagGetSimilarResponse struct {
+type tagGetSimilarResponse struct {
 	SimilarTags struct {
-		Tag  TagList `json:"tag"`
-		Attr struct {
-			Tag string `json:"tag"`
-		} `json:"@attr"`
+		Tag TagList `json:"tag"`
 	} `json:"similartags"`
 }
 
-// TagGetTopAlbumsResponse is the response from tag.getTopAlbums.
-type TagGetTopAlbumsResponse struct {
+type tagGetTopAlbumsResponse struct {
 	Albums struct {
 		Album AlbumList `json:"album"`
 		Attr  Attr      `json:"@attr"`
 	} `json:"albums"`
 }
 
-// TagGetTopArtistsResponse is the response from tag.getTopArtists.
-type TagGetTopArtistsResponse struct {
+type tagGetTopArtistsResponse struct {
 	TopArtists struct {
 		Artist ArtistList `json:"artist"`
 		Attr   Attr       `json:"@attr"`
 	} `json:"topartists"`
 }
 
-// TagGetTopTagsResponse is the response from tag.getTopTags.
-type TagGetTopTagsResponse struct {
+type tagGetTopTagsResponse struct {
 	TopTags struct {
-		Tag  TagList `json:"tag"`
-		Attr struct {
-			NumRes int `json:"num_res"`
-			Offset int `json:"offset"`
-			Total  int `json:"total"`
-		} `json:"@attr"`
+		Tag TagList `json:"tag"`
 	} `json:"toptags"`
 }
 
-// TagGetTopTracksResponse is the response from tag.getTopTracks.
-type TagGetTopTracksResponse struct {
+type tagGetTopTracksResponse struct {
 	Tracks struct {
 		Track TrackList `json:"track"`
 		Attr  Attr      `json:"@attr"`
 	} `json:"tracks"`
 }
 
-// TagGetWeeklyChartListResponse is the response from tag.getWeeklyChartList.
-type TagGetWeeklyChartListResponse struct {
+type tagGetWeeklyChartListResponse struct {
 	WeeklyChartList struct {
 		Chart ChartList `json:"chart"`
-		Attr  struct {
-			Tag string `json:"tag"`
-		} `json:"@attr"`
 	} `json:"weeklychartlist"`
 }

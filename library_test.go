@@ -36,10 +36,12 @@ func TestLibraryService_GetArtists(t *testing.T) {
 	}
 
 	service := golastfmclient.NewLibraryService(mock)
-	res, err := service.GetArtists(context.Background(), "RJ", nil)
+	artists, attr, err := service.GetArtists(context.Background(), "RJ", nil)
 
 	assert.NoError(t, err)
-	assert.Len(t, res.Artists.Artist, 1)
-	assert.Equal(t, "Dream Theater", res.Artists.Artist[0].Name)
-	assert.Equal(t, "1346", res.Artists.Artist[0].Playcount.String())
+	assert.Len(t, artists, 1)
+	assert.Equal(t, "Dream Theater", artists[0].Name)
+	assert.Equal(t, "1346", artists[0].Playcount.String())
+	assert.Equal(t, "RJ", attr.User)
+	assert.Equal(t, "1", attr.Page.String())
 }

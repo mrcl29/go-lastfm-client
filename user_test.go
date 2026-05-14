@@ -32,8 +32,8 @@ func TestUserService_GetInfo(t *testing.T) {
 	res, err := service.GetInfo(context.Background(), "rj", nil)
 
 	assert.NoError(t, err)
-	assert.Equal(t, "rj", res.User.Name)
-	assert.Equal(t, json.Number("12345"), res.User.Playcount)
+	assert.Equal(t, "rj", res.Name)
+	assert.Equal(t, json.Number("12345"), res.Playcount)
 }
 
 func TestUserService_GetRecentTracks(t *testing.T) {
@@ -57,11 +57,12 @@ func TestUserService_GetRecentTracks(t *testing.T) {
 	}
 
 	service := golastfmclient.NewUserService(mock)
-	res, err := service.GetRecentTracks(context.Background(), "rj", nil)
+	res, attr, err := service.GetRecentTracks(context.Background(), "rj", nil)
 
 	assert.NoError(t, err)
-	assert.Len(t, res.RecentTracks.Track, 1)
-	assert.Equal(t, "Believe", res.RecentTracks.Track[0].Name)
+	assert.Len(t, res, 1)
+	assert.Equal(t, "Believe", res[0].Name)
+	assert.Equal(t, "rj", attr.User)
 }
 
 func TestUserService_GetTopArtists(t *testing.T) {
@@ -85,11 +86,12 @@ func TestUserService_GetTopArtists(t *testing.T) {
 	}
 
 	service := golastfmclient.NewUserService(mock)
-	res, err := service.GetTopArtists(context.Background(), "rj", nil)
+	res, attr, err := service.GetTopArtists(context.Background(), "rj", nil)
 
 	assert.NoError(t, err)
-	assert.Equal(t, "Cher", res.TopArtists.Artist[0].Name)
-	assert.Equal(t, json.Number("100"), res.TopArtists.Artist[0].Playcount)
+	assert.Equal(t, "Cher", res[0].Name)
+	assert.Equal(t, json.Number("100"), res[0].Playcount)
+	assert.Equal(t, "rj", attr.User)
 }
 
 func TestUserService_GetPersonalTags(t *testing.T) {
@@ -115,11 +117,12 @@ func TestUserService_GetPersonalTags(t *testing.T) {
 	}
 
 	service := golastfmclient.NewUserService(mock)
-	res, err := service.GetPersonalTags(context.Background(), "rj", "diva", "artist", nil)
+	res, attr, err := service.GetPersonalTags(context.Background(), "rj", "diva", "artist", nil)
 
 	assert.NoError(t, err)
-	assert.NotNil(t, res.Taggings.Artists)
-	assert.Equal(t, "Cher", res.Taggings.Artists.Artist[0].Name)
+	assert.NotNil(t, res.Artists)
+	assert.Equal(t, "Cher", res.Artists[0].Name)
+	assert.Equal(t, "diva", attr.Tag)
 }
 
 func TestUserService_GetTopTags(t *testing.T) {
@@ -144,8 +147,8 @@ func TestUserService_GetTopTags(t *testing.T) {
 	res, err := service.GetTopTags(context.Background(), "rj", nil)
 
 	assert.NoError(t, err)
-	assert.Len(t, res.TopTags.Tag, 1)
-	assert.Equal(t, "pop", res.TopTags.Tag[0].Name)
+	assert.Len(t, res, 1)
+	assert.Equal(t, "pop", res[0].Name)
 }
 
 func TestUserService_GetWeeklyChartList(t *testing.T) {
@@ -170,6 +173,6 @@ func TestUserService_GetWeeklyChartList(t *testing.T) {
 	res, err := service.GetWeeklyChartList(context.Background(), "rj")
 
 	assert.NoError(t, err)
-	assert.Len(t, res.WeeklyChartList.Chart, 1)
-	assert.Equal(t, "1108296002", res.WeeklyChartList.Chart[0].From)
+	assert.Len(t, res, 1)
+	assert.Equal(t, "1108296002", res[0].From)
 }
